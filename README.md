@@ -13,6 +13,8 @@ This project was built in **Godot 4.6.1 stable**.
 - exports the authored map to JSON
 - includes a name-sync helper for keeping node names readable and consistent
 
+You do **not** need to understand Godot well to use this tool.
+
 This repository does **not** include any proprietary Ticket to Ride artwork or map assets. Any example blueprint assets should be original placeholders created for testing.
 
 ## Install Godot
@@ -42,12 +44,12 @@ Typical files:
 
 1. Open the project in Godot.
 2. Open `TicketMapEditor.tscn`, or create a new scene using the same structure.
-3. Add city instances under the `Cities` node.
-4. Add route instances under the `Routes` node.
+3. Add city instances under the `Cities` Node2D.
+4. Add route instances under the `Routes` Node2D.
 5. Assign each route’s `from_city` and `to_city`.
 6. Adjust route points in the editor.
 7. Optionally run the `NameSyncer` tool button.
-8. Export the map to JSON from the editor tool button.
+8. Export the map to JSON from the editor tool button ("Export Map JSON") within TicketMapEditor.
 
 You can also create a completely new map by duplicating or recreating a `TicketMapEditor` scene and building a new level there.
 
@@ -71,6 +73,7 @@ If you are new to Godot:
 - To add a reusable scene like `CityNode.tscn` or `RouteNode.tscn`, use **Instantiate Child Scene** rather than creating a plain child node. In the editor this is commonly opened with **Ctrl+Shift+A** on windows (it is the clip looking thing on the top left).
 - If you want to change the defaults for all cities or all routes, open and edit the base `CityNode.tscn` or `RouteNode.tscn` scene directly instead of only editing one instance.
 - Node names in the scene tree can be synchronized with the `NameSyncer` helper.
+- When trying to move the City Nodes, Route Nodes and route segments (the points of the Line2D) around, getting familiar with the Select Mode and Move Mode of your mouse is useful.
 
 ## Core scenes and scripts
 
@@ -221,9 +224,11 @@ A normal workflow is:
 4. author a new level/map there
 5. export it to JSON
 
-## Learning Godot basics
+## AI Declaration
 
-If you have never used Godot before, start with the official introduction and step-by-step docs first. They explain scenes, nodes, and the editor workflow that this tool relies on. :contentReference[oaicite:5]{index=5}
+This project was developed with partial assistance from OpenAI's ChatGPT, using the GPT-5.4 Thinking model.
+
+The AI tool was used to support ideation, code generation, refactoring suggestions, implementation planning, and documentation drafting. Final responsibility for selecting, modifying, integrating, and validating the resulting work remained with the project author.
 
 ## License
 
