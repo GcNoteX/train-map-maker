@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://085y77hrhfnx"]
+
+[ext_resource type="Script" uid="uid://exsfuqnh14jk" path="res://route_node.gd" id="1_rpcg5"]
+
+[node name="RouteNode" type="Line2D" unique_id=612778987]
+points = PackedVector2Array(0, 0, 72, 0, 72, 0, 72, 0, 144, 0)
+width = 4.0
+default_color = Color(0.85, 0.851, 0.844, 1)
+script = ExtResource("1_rpcg5")
+line_width = 4.0
+segment_size = Vector2(64, 25)
+
+[node name="RouteLabel" type="Label" parent="." unique_id=979981387]
+z_index = 1
+offset_left = 72.0
+offset_top = -22.0
+offset_right = 160.0
+offset_bottom = 1.0
+theme_override_colors/font_color = Color(0.85, 0.851, 0.844, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+text = "RouteNode"

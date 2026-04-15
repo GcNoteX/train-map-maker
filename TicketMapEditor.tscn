@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://by0bwnhni22qc"]
+
+[ext_resource type="Script" uid="uid://bf25eggrlu01v" path="res://ticket_map_editor.gd" id="1_522j3"]
+[ext_resource type="PackedScene" uid="uid://covv14jwjwgis" path="res://CityNode.tscn" id="2_l7xwy"]
+[ext_resource type="Script" uid="uid://cvr8uh7y0ljo0" path="res://editor_name_sync.gd" id="2_mpclr"]
+[ext_resource type="Texture2D" uid="uid://b2oqe8oq2trtd" path="res://example_graph.jpg" id="2_uyhb5"]
+[ext_resource type="PackedScene" uid="uid://085y77hrhfnx" path="res://RouteNode.tscn" id="3_1n01n"]
+
+[node name="TicketMapEditor" type="Node2D" unique_id=223255503]
+script = ExtResource("1_522j3")
+map_id = "example_map"
+map_size = Vector2(953, 612)
+background_texture = ExtResource("2_uyhb5")
+background_modulate = Color(1, 1, 1, 0.5764706)
+
+[node name="NameSyncer" type="Node" parent="." unique_id=1622084285]
+script = ExtResource("2_mpclr")
+
+[node name="BackgroundSprite" type="Sprite2D" parent="." unique_id=1526484074]
+modulate = Color(1, 1, 1, 0.5764706)
+z_index = -10
+position = Vector2(476.5, 306)
+texture = ExtResource("2_uyhb5")
+metadata/_edit_lock_ = true
+
+[node name="Cities" type="Node2D" parent="." unique_id=1680039831]
+metadata/_edit_lock_ = true
+
+[node name="City_1" parent="Cities" unique_id=871134643 instance=ExtResource("2_l7xwy")]
+position = Vector2(120, 266)
+city_id = "city_1"
+display_name = "City 1"
+use_node_name_for_label = false
+marker_radius = 18.0
+marker_color = Color(0.118796654, 0.5113481, 0.89536375, 1)
+
+[node name="City_2" parent="Cities" unique_id=2122529415 instance=ExtResource("2_l7xwy")]
+position = Vector2(375, 67)
+city_id = "city_2"
+display_name = "City 2"
+use_node_name_for_label = false
+marker_radius = 18.0
+
+[node name="City_3" parent="Cities" unique_id=868953137 instance=ExtResource("2_l7xwy")]
+position = Vector2(75, 62)
+city_id = "city_3"
+display_name = "City 3"
+use_node_name_for_label = false
+marker_radius = 18.0
+marker_color = Color(0.40692228, 0.41351697, 1, 1)
+
+[node name="Routes" type="Node2D" parent="." unique_id=878588858]
+metadata/_edit_lock_ = true
+
+[node name="City_1_to_City_2" parent="Routes" unique_id=612778987 node_paths=PackedStringArray("from_city", "to_city") instance=ExtResource("3_1n01n")]
+points = PackedVector2Array(120, 266, 183, 261, 253, 273, 310, 247, 314, 180, 331, 111, 375, 67)
+default_color = Color(0.2, 0.4, 0.9, 1)
+from_city = NodePath("../../Cities/City_1")
+to_city = NodePath("../../Cities/City_2")
+route_length = 5
+cart_type = 2
+
+[node name="City_1_to_City_3" parent="Routes" unique_id=1793747815 node_paths=PackedStringArray("from_city", "to_city") instance=ExtResource("3_1n01n")]
+points = PackedVector2Array(120, 266, 104, 198, 85, 129, 75, 62)
+default_color = Color(0.85, 0.2, 0.2, 1)
+from_city = NodePath("../../Cities/City_1")
+to_city = NodePath("../../Cities/City_3")
+route_length = 2
+cart_type = 8
+
+[node name="City_2_to_City_3" parent="Routes" unique_id=1076772127 node_paths=PackedStringArray("from_city", "to_city") instance=ExtResource("3_1n01n")]
+points = PackedVector2Array(375, 67, 291, 61, 221, 60, 151, 60, 75, 62)
+default_color = Color(0.2, 0.7, 0.3, 1)
+from_city = NodePath("../../Cities/City_2")
+to_city = NodePath("../../Cities/City_3")
+cart_type = 5

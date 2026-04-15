@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://covv14jwjwgis"]
+
+[ext_resource type="Script" uid="uid://c1j4vblt6kx2r" path="res://city_node.gd" id="1_7nx4q"]
+
+[node name="CityNode" type="Node2D" unique_id=871134643]
+script = ExtResource("1_7nx4q")
+use_node_name_for_label = null
+label_outline_size = 5
+
+[node name="NameLabel" type="Label" parent="." unique_id=1241156668]
+z_index = 1
+offset_left = 14.0
+offset_top = -28.0
+offset_right = 61.0
+offset_bottom = -5.0
+theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+text = "City"
