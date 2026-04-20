@@ -47,6 +47,7 @@ class_name TicketMapEditor
 @export var normalize_to_positive_coordinates: bool = true
 
 @export_file("*.json") var export_json_path: String = "res://maps/example_map.json"
+@export_file("*.tres") var export_map_data_resource_path: String = "res://maps/map_data.tres"
 
 @onready var background_sprite: Sprite2D = $BackgroundSprite
 @onready var cities_root: Node2D = $Cities
@@ -54,6 +55,8 @@ class_name TicketMapEditor
 
 @export_tool_button("Export Map JSON")
 var export_map_json_action := _export_map_json
+@export_tool_button("Export Map Data Resource")
+var export_map_data_resource_action := _export_map_data_resource
 
 func _ready() -> void:
 	_refresh_background()
@@ -124,6 +127,20 @@ func _export_map_json() -> void:
 
 	print("Map exported successfully to: %s" % export_json_path)
 
+## Builds and saves a TicketMapData resource from the current editor state.
+func _export_map_data_resource() -> void:
+	if not _validate_map():
+		push_error("Map data resource export failed validation.")
+		return
+
+	var map_data: TicketMapData = _build_map_data_resource()
+
+	var save_result: Error = ResourceSaver.save(map_data, export_map_data_resource_path)
+	if save_result != OK:
+		push_error("Failed to save map data resource: %s" % export_map_data_resource_path)
+		return
+
+	print("Map data resource exported successfully to: %s" % export_map_data_resource_path)
 ## Ensures city IDs are valid and route references are valid before export.
 func _validate_map() -> bool:
 	if not is_node_ready():
@@ -305,3 +322,90 @@ func _ensure_export_directory_exists() -> bool:
 		return false
 
 	return true
+
+## Builds a TicketMapData resource from the current editor state.
+func _build_map_data_resource() -> TicketMapData:
+	var normalization_offset: Vector2 = Vector2.ZERO
+	if normalize_to_positive_coordinates:
+		normalization_offset = _compute_normalization_offset()
+
+	var map_data := TicketMapData.new()
+	map_data.map_id = map_id
+	map_data.map_size = map_size
+	map_data.normalized = normalize_to_positive_coordinates
+	map_data.normalization_offset = normalization_offset
+	map_data.cities = _build_city_data_resources(normalization_offset)
+	map_data.routes = _build_route_data_resources(normalization_offset)
+
+	return map_data
+
+## Builds TicketCityData resources from authored CityNodes.
+func _build_city_data_resources(normalization_offset: Vector2) -> Array[TicketCityData]:
+	var result: Array[TicketCityData] = []
+
+	for child in cities_root.get_children():
+		if not child is CityNode:
+			continue
+
+		var city: CityNode = child
+		var city_data := TicketCityData.new()
+		city_data.city_id = city.city_id
+		city_data.display_name = city.display_name
+		city_data.position = city.global_position + normalization_offset
+
+		result.append(city_data)
+
+	return result
+
+## Builds TicketRouteData resources from authored RouteNodes.
+func _build_route_data_resources(normalization_offset: Vector2) -> Array[TicketRouteData]:
+	var result: Array[TicketRouteData] = []
+
+	for child in routes_root.get_children():
+		if not child is RouteNode:
+			continue
+
+		var route: RouteNode = child
+		var route_data := TicketRouteData.new()
+
+		route_data.node_name = route.name
+		route_data.from_city_id = route.from_city.city_id
+		route_data.to_city_id = route.to_city.city_id
+		route_data.route_length = route.route_length
+		route_data.cart_type = CartTypes.enum_to_string(route.cart_type)
+		route_data.points = _build_route_points(route, normalization_offset)
+		route_data.segment_points = _build_route_segment_point_resources(route, normalization_offset)
+
+		result.append(route_data)
+
+	return result
+
+## Builds exported route points in global normalized space.
+func _build_route_points(route: RouteNode, normalization_offset: Vector2) -> Array[Vector2]:
+	var result: Array[Vector2] = []
+
+	for local_point in route.points:
+		var global_point: Vector2 = route.to_global(local_point) + normalization_offset
+		result.append(global_point)
+
+	return result
+
+## Builds TicketSegmentPointData resources for the route's interior segment points.
+func _build_route_segment_point_resources(route: RouteNode, normalization_offset: Vector2) -> Array[TicketSegmentPointData]:
+	var result: Array[TicketSegmentPointData] = []
+	var local_points: PackedVector2Array = route.points
+
+	for i in range(1, local_points.size() - 1):
+		var prev_global: Vector2 = route.to_global(local_points[i - 1]) + normalization_offset
+		var current_global: Vector2 = route.to_global(local_points[i]) + normalization_offset
+		var next_global: Vector2 = route.to_global(local_points[i + 1]) + normalization_offset
+
+		var direction: Vector2 = next_global - prev_global
+		var segment_data := TicketSegmentPointData.new()
+		segment_data.index = i - 1
+		segment_data.position = current_global
+		segment_data.rotation_radians = direction.angle()
+
+		result.append(segment_data)
+
+	return result
