@@ -2,6 +2,15 @@
 extends Control
 class_name TicketGameConfigEditor
 
+@export_category("Responsive UI")
+@export var auto_scale_ui: bool = true
+@export_range(0.4, 1.0, 0.05) var small_screen_scale: float = 0.70
+@export_range(0.4, 1.0, 0.05) var medium_screen_scale: float = 0.85
+@export var small_screen_width_threshold: int = 1000
+@export var medium_screen_width_threshold: int = 1200
+
+@onready var ui_scale_root: Control = %UIScaleRoot
+
 @export_category("Data")
 @export var config_data: TicketGameConfigData = null:
 	set(value):
@@ -98,6 +107,34 @@ func _ready() -> void:
 	_refresh_config_resource_label()
 	_refresh_save_path_label()
 	_refresh_export_folder_label()
+	_apply_responsive_ui_scale()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED:
+		_apply_responsive_ui_scale()
+
+func _apply_responsive_ui_scale() -> void:
+	if not is_node_ready():
+		return
+
+	if not auto_scale_ui:
+		ui_scale_root.scale = Vector2.ONE
+		return
+
+	var viewport_size: Vector2 = get_viewport_rect().size
+	var width: float = viewport_size.x
+
+	var target_scale: float = 1.0
+
+	if width < small_screen_width_threshold:
+		target_scale = small_screen_scale
+	elif width < medium_screen_width_threshold:
+		target_scale = medium_screen_scale
+	else:
+		target_scale = 1.0
+
+	ui_scale_root.scale = Vector2.ONE * target_scale
 
 ## Rebuilds the editor UI from the current config resource.
 func _refresh_ui_from_config() -> void:
@@ -220,7 +257,7 @@ func _build_transport_card_rows() -> void:
 		row.image_pick_requested.connect(_on_transport_image_pick_requested)
 		row.image_clear_requested.connect(_on_transport_image_clear_requested)
 		row.image_preview_requested.connect(_on_transport_image_preview_requested)
-
+		
 ## Builds rows for each destination ticket config entry.
 func _build_destination_ticket_rows() -> void:
 	if config_data == null:
@@ -254,6 +291,7 @@ func _build_destination_ticket_rows() -> void:
 		row.image_pick_requested.connect(_on_destination_image_pick_requested)
 		row.image_clear_requested.connect(_on_destination_image_clear_requested)
 		row.data_changed.connect(_on_destination_ticket_data_changed)
+		row.image_preview_requested.connect(_on_destination_image_preview_requested)
 
 func _on_destination_ticket_data_changed() -> void:
 	_build_destination_ticket_rows()

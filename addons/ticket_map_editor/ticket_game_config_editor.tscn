@@ -13,6 +13,8 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_n42cy")
+small_screen_scale = 0.5
+small_screen_width_threshold = 800
 config_data = ExtResource("2_dul32")
 save_config_resource_path = "res://workspace/config_data/example_map_game_config.tres"
 
@@ -59,7 +61,16 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=374136243]
+[node name="UIScaleRoot" type="Control" parent="." unique_id=1307662705]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UIScaleRoot" unique_id=374136243]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -69,183 +80,193 @@ grow_vertical = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=81603221]
+[node name="ScrollContainer" type="ScrollContainer" parent="UIScaleRoot/MarginContainer" unique_id=1026566658]
 layout_mode = 2
 
-[node name="HeaderSection" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1227858372]
+[node name="VBoxContainer" type="VBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer" unique_id=81603221]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HeaderSection" type="VBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1227858372]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection" unique_id=191020349]
+[node name="TitleLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection" unique_id=191020349]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Ticket Game Config Editor"
+horizontal_alignment = 1
+
+[node name="ConfigResourceRow" type="HBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection" unique_id=1256346788]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ConfigResourceRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HeaderSection" unique_id=1256346788]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="ConfigResourceLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/ConfigResourceRow" unique_id=1468197285]
+[node name="ConfigResourceLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ConfigResourceRow" unique_id=1468197285]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Config Resource: "
 
-[node name="ConfigResourcePathLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/ConfigResourceRow" unique_id=871427602]
+[node name="ConfigResourcePathLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ConfigResourceRow" unique_id=871427602]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "res://workspace/config_data/example_map_game_config.tres"
+clip_text = true
 
-[node name="LoadConfigButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderSection/ConfigResourceRow" unique_id=163355972]
+[node name="LoadConfigButton" type="Button" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ConfigResourceRow" unique_id=163355972]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Load Config"
 
-[node name="NewConfigButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderSection/ConfigResourceRow" unique_id=487763946]
+[node name="NewConfigButton" type="Button" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ConfigResourceRow" unique_id=487763946]
 unique_name_in_owner = true
 layout_mode = 2
 text = "New Config"
 
-[node name="SavePathRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HeaderSection" unique_id=1137445772]
+[node name="SavePathRow" type="HBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection" unique_id=1137445772]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SavePathLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/SavePathRow" unique_id=1340641687]
+[node name="SavePathLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/SavePathRow" unique_id=1340641687]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Save Path: "
 
-[node name="SavePathValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/SavePathRow" unique_id=781285958]
+[node name="SavePathValueLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/SavePathRow" unique_id=781285958]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "res://workspace/config_data/example_map_game_config.tres"
+clip_text = true
 
-[node name="ChooseSavePathButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderSection/SavePathRow" unique_id=380434762]
+[node name="ChooseSavePathButton" type="Button" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/SavePathRow" unique_id=380434762]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Choose Save Dir"
 
-[node name="ExportFolderRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HeaderSection" unique_id=1552068584]
+[node name="ExportFolderRow" type="HBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection" unique_id=1552068584]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ExportFolderLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=483943866]
+[node name="ExportFolderLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=483943866]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Folder Export Path: "
 
-[node name="ExportFolderValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=2124759901]
+[node name="ExportFolderValueLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=2124759901]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "res://workspace/exports"
+clip_text = true
 
-[node name="ChooseExportFolderButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=1503588779]
+[node name="ChooseExportFolderButton" type="Button" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=1503588779]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Choose Export Folder"
 
-[node name="ExportPackButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=2124425728]
+[node name="ExportPackButton" type="Button" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=2124425728]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Export Folder"
 
-[node name="SourceMapRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HeaderSection" unique_id=146990613]
+[node name="SourceMapRow" type="HBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection" unique_id=146990613]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SourceMapLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/SourceMapRow" unique_id=1527853118]
+[node name="SourceMapLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/SourceMapRow" unique_id=1527853118]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Source Map:"
 
-[node name="SourceMapValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/SourceMapRow" unique_id=1617878868]
+[node name="SourceMapValueLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/SourceMapRow" unique_id=1617878868]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "example_map"
 
-[node name="TrainsRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HeaderSection" unique_id=1422755817]
+[node name="TrainsRow" type="HBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection" unique_id=1422755817]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TrainsLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/TrainsRow" unique_id=1008713599]
+[node name="TrainsLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/TrainsRow" unique_id=1008713599]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Number of Trains for each Player:"
 
-[node name="TrainsSpinBox" type="SpinBox" parent="MarginContainer/VBoxContainer/HeaderSection/TrainsRow" unique_id=1631444724]
+[node name="TrainsSpinBox" type="SpinBox" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/TrainsRow" unique_id=1631444724]
 unique_name_in_owner = true
 layout_mode = 2
 value = 45.0
 
-[node name="ButtonRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HeaderSection" unique_id=1363074937]
+[node name="ButtonRow" type="HBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection" unique_id=1363074937]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CreateDefaultConfigButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderSection/ButtonRow" unique_id=1972505925]
+[node name="CreateDefaultConfigButton" type="Button" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ButtonRow" unique_id=1972505925]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Create Default Config"
 
-[node name="AddDestinationTicketButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderSection/ButtonRow" unique_id=415384302]
+[node name="AddDestinationTicketButton" type="Button" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ButtonRow" unique_id=415384302]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Add Destination Ticket"
 
-[node name="SaveConfigResourceButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderSection/ButtonRow" unique_id=941268268]
+[node name="SaveConfigResourceButton" type="Button" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection/ButtonRow" unique_id=941268268]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Save Config Resource"
 
-[node name="DestinationCountLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection" unique_id=164944921]
+[node name="DestinationCountLabel" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/HeaderSection" unique_id=164944921]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Destination Tickets: 4 total / 2 enabled"
 
-[node name="MainScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=60349955]
+[node name="MainScrollContainer" type="ScrollContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer" unique_id=60349955]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MainContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainScrollContainer" unique_id=1632751986]
+[node name="MainContent" type="VBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/MainScrollContainer" unique_id=1632751986]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TransportCardsFoldable" type="FoldableContainer" parent="MarginContainer/VBoxContainer/MainScrollContainer/MainContent" unique_id=1976542614]
+[node name="TransportCardsFoldable" type="FoldableContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/MainScrollContainer/MainContent" unique_id=1976542614]
 unique_name_in_owner = true
 layout_mode = 2
 title = "Transport Cards"
 
-[node name="TransportCardsTitle" type="Label" parent="MarginContainer/VBoxContainer/MainScrollContainer/MainContent/TransportCardsFoldable" unique_id=450700163]
+[node name="TransportCardsTitle" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/MainScrollContainer/MainContent/TransportCardsFoldable" unique_id=450700163]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TransportCardsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainScrollContainer/MainContent/TransportCardsFoldable" unique_id=845294609]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="DestinationTicketsSection" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainScrollContainer/MainContent" unique_id=1509712820]
+[node name="TransportCardsContainer" type="VBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/MainScrollContainer/MainContent/TransportCardsFoldable" unique_id=845294609]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="DestinationTicketsTitle" type="Label" parent="MarginContainer/VBoxContainer/MainScrollContainer/MainContent/DestinationTicketsSection" unique_id=1966668768]
+[node name="DestinationTicketsSection" type="VBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/MainScrollContainer/MainContent" unique_id=1509712820]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DestinationTicketsTitle" type="Label" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/MainScrollContainer/MainContent/DestinationTicketsSection" unique_id=1966668768]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="DestinationTicketsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainScrollContainer/MainContent/DestinationTicketsSection" unique_id=110829551]
+[node name="DestinationTicketsContainer" type="VBoxContainer" parent="UIScaleRoot/MarginContainer/ScrollContainer/VBoxContainer/MainScrollContainer/MainContent/DestinationTicketsSection" unique_id=110829551]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3

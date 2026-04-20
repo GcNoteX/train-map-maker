@@ -23,6 +23,7 @@ var _data: DestinationTicketConfigData = null
 var _city_ids: Array[String] = []
 
 func _ready() -> void:
+	
 	if not image_preview_button.pressed.is_connected(_on_image_preview_pressed):
 		image_preview_button.pressed.connect(_on_image_preview_pressed)
 	if not enabled_check_box.toggled.is_connected(_on_enabled_toggled):
@@ -142,6 +143,7 @@ func _refresh_preview_button() -> void:
 
 func _on_image_preview_pressed() -> void:
 	if _data == null or _data.image == null:
+		print("No Image")
 		return
 
 	image_preview_requested.emit(_data)
