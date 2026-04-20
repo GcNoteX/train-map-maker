@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://kyyhia4sfg41" path="res://ticket_map_editor/data/destination_ticket_config_data.gd" id="1_w616u"]
 [ext_resource type="Texture2D" uid="uid://b2oqe8oq2trtd" path="res://workspace/img/example_graph.jpg" id="2_mg2o5"]
-[ext_resource type="Resource" uid="uid://2gm7tchym5mp" path="res://maps/map_data.tres" id="3_uhx1u"]
+[ext_resource type="Resource" uid="uid://de87wemw1i3wm" path="res://workspace/map_data/example_map_map_data.tres" id="3_w616u"]
 [ext_resource type="Script" uid="uid://6wfvn15c0uyb" path="res://ticket_map_editor/data/ticket_game_config_data.gd" id="4_qag3h"]
 [ext_resource type="Script" uid="uid://bhr3fap04n2qe" path="res://ticket_map_editor/data/transport_card_config_data.gd" id="5_q6m0h"]
 [ext_resource type="Texture2D" uid="uid://cannk5fyhdkck" path="res://workspace/img/london_map.jpg" id="6_2wjja"]
@@ -72,7 +72,7 @@ cart_type = "GRAY"
 
 [resource]
 script = ExtResource("4_qag3h")
-map_data = ExtResource("3_uhx1u")
+map_data = ExtResource("3_w616u")
 transport_cards = Array[ExtResource("5_q6m0h")]([SubResource("Resource_2i16v"), SubResource("Resource_pw5hr"), SubResource("Resource_2o1gd"), SubResource("Resource_m5ml5"), SubResource("Resource_t8x0l"), SubResource("Resource_jiwmq"), SubResource("Resource_fqlsp"), SubResource("Resource_2rw4n"), SubResource("Resource_bey8b")])
 destination_tickets = Array[ExtResource("1_w616u")]([SubResource("Resource_ni10h"), SubResource("Resource_h7p20"), SubResource("Resource_pan2t"), SubResource("Resource_sxa38")])
 metadata/_custom_type_script = "uid://6wfvn15c0uyb"
