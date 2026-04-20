@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2oqe8oq2trtd"
-path="res://.godot/imported/example_graph.jpg-be80c7b4dd5a1b15fbaf27deaff26b56.ctex"
+uid="uid://dkrokyygwudy1"
+path="res://.godot/imported/destination_01.jpg-deeddd2d59a76be878fff1acc9f2d18f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ticket_map_editor/examples/example_graph.jpg"
-dest_files=["res://.godot/imported/example_graph.jpg-be80c7b4dd5a1b15fbaf27deaff26b56.ctex"]
+source_file="res://workspace/exports/example_map_export/img/destination_01.jpg"
+dest_files=["res://.godot/imported/destination_01.jpg-deeddd2d59a76be878fff1acc9f2d18f.ctex"]
 
 [params]
 

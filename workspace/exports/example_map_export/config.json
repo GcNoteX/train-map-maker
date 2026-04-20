@@ -1,0 +1,283 @@
+{
+	"game_config": {
+		"destination_tickets": [
+			{
+				"from_city_id": "city_1",
+				"image_path": "img/destination_01.jpg",
+				"points": 1,
+				"to_city_id": "city_3"
+			},
+			{
+				"from_city_id": "city_2",
+				"image_path": "",
+				"points": 0,
+				"to_city_id": "city_1"
+			}
+		],
+		"trains_per_player": 45,
+		"transport_cards": [
+			{
+				"card_count": 6,
+				"cart_type": "PURPLE",
+				"image_path": "img/transport_purple.jpg"
+			},
+			{
+				"card_count": 3,
+				"cart_type": "BLUE",
+				"image_path": ""
+			},
+			{
+				"card_count": 0,
+				"cart_type": "ORANGE",
+				"image_path": ""
+			},
+			{
+				"card_count": 0,
+				"cart_type": "WHITE",
+				"image_path": ""
+			},
+			{
+				"card_count": 0,
+				"cart_type": "GREEN",
+				"image_path": ""
+			},
+			{
+				"card_count": 0,
+				"cart_type": "YELLOW",
+				"image_path": ""
+			},
+			{
+				"card_count": 0,
+				"cart_type": "BLACK",
+				"image_path": ""
+			},
+			{
+				"card_count": 0,
+				"cart_type": "RED",
+				"image_path": ""
+			},
+			{
+				"card_count": 0,
+				"cart_type": "GRAY",
+				"image_path": ""
+			}
+		]
+	},
+	"map": {
+		"cities": [
+			{
+				"display_name": "City 1",
+				"id": "city_1",
+				"position": {
+					"x": 120.0,
+					"y": 266.0
+				}
+			},
+			{
+				"display_name": "City 2",
+				"id": "city_2",
+				"position": {
+					"x": 375.0,
+					"y": 67.0
+				}
+			},
+			{
+				"display_name": "City 3",
+				"id": "city_3",
+				"position": {
+					"x": 75.0,
+					"y": 62.0
+				}
+			}
+		],
+		"map_id": "example_map",
+		"map_size": {
+			"x": 953.0,
+			"y": 612.0
+		},
+		"normalization_offset": {
+			"x": 0.0,
+			"y": 0.0
+		},
+		"normalized": true,
+		"routes": [
+			{
+				"cart_type": "BLUE",
+				"from_city_id": "city_1",
+				"node_name": "City_1_to_City_2",
+				"points": [
+					{
+						"x": 120.0,
+						"y": 266.0
+					},
+					{
+						"x": 183.0,
+						"y": 261.0
+					},
+					{
+						"x": 253.0,
+						"y": 273.0
+					},
+					{
+						"x": 310.0,
+						"y": 247.0
+					},
+					{
+						"x": 314.0,
+						"y": 180.0
+					},
+					{
+						"x": 331.0,
+						"y": 111.0
+					},
+					{
+						"x": 375.0,
+						"y": 67.0
+					}
+				],
+				"route_length": 5,
+				"segment_points": [
+					{
+						"index": 0,
+						"position": {
+							"x": 183.0,
+							"y": 261.0
+						},
+						"rotation_radians": 0.05258306
+					},
+					{
+						"index": 1,
+						"position": {
+							"x": 253.0,
+							"y": 273.0
+						},
+						"rotation_radians": -0.10979292
+					},
+					{
+						"index": 2,
+						"position": {
+							"x": 310.0,
+							"y": 247.0
+						},
+						"rotation_radians": -0.9902749
+					},
+					{
+						"index": 3,
+						"position": {
+							"x": 314.0,
+							"y": 180.0
+						},
+						"rotation_radians": -1.4175946
+					},
+					{
+						"index": 4,
+						"position": {
+							"x": 331.0,
+							"y": 111.0
+						},
+						"rotation_radians": -1.0758001
+					}
+				],
+				"to_city_id": "city_2"
+			},
+			{
+				"cart_type": "RED",
+				"from_city_id": "city_1",
+				"node_name": "City_1_to_City_3",
+				"points": [
+					{
+						"x": 120.0,
+						"y": 266.0
+					},
+					{
+						"x": 104.0,
+						"y": 198.0
+					},
+					{
+						"x": 85.0,
+						"y": 129.0
+					},
+					{
+						"x": 75.0,
+						"y": 62.0
+					}
+				],
+				"route_length": 2,
+				"segment_points": [
+					{
+						"index": 0,
+						"position": {
+							"x": 104.0,
+							"y": 198.0
+						},
+						"rotation_radians": -1.8209207
+					},
+					{
+						"index": 1,
+						"position": {
+							"x": 85.0,
+							"y": 129.0
+						},
+						"rotation_radians": -1.7808851
+					}
+				],
+				"to_city_id": "city_3"
+			},
+			{
+				"cart_type": "GREEN",
+				"from_city_id": "city_2",
+				"node_name": "City_2_to_City_3",
+				"points": [
+					{
+						"x": 375.0,
+						"y": 67.0
+					},
+					{
+						"x": 291.0,
+						"y": 61.0
+					},
+					{
+						"x": 221.0,
+						"y": 60.0
+					},
+					{
+						"x": 151.0,
+						"y": 60.0
+					},
+					{
+						"x": 75.0,
+						"y": 62.0
+					}
+				],
+				"route_length": 3,
+				"segment_points": [
+					{
+						"index": 0,
+						"position": {
+							"x": 291.0,
+							"y": 61.0
+						},
+						"rotation_radians": -3.0961695
+					},
+					{
+						"index": 1,
+						"position": {
+							"x": 221.0,
+							"y": 60.0
+						},
+						"rotation_radians": -3.13445
+					},
+					{
+						"index": 2,
+						"position": {
+							"x": 151.0,
+							"y": 60.0
+						},
+						"rotation_radians": 3.1278949
+					}
+				],
+				"to_city_id": "city_3"
+			}
+		]
+	}
+}

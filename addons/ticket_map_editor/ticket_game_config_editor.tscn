@@ -35,6 +35,12 @@ file_mode = 0
 access = 2
 filters = PackedStringArray("*.png ; PNG Images", "*.jpg,*.jpeg ; JPEG Images", "*.webp ; WEBP Images")
 
+[node name="ExportFolderDialog" type="FileDialog" parent="." unique_id=1134632678]
+unique_name_in_owner = true
+title = "Open a Directory"
+file_mode = 2
+access = 2
+
 [node name="ImagePreviewPopup" type="AcceptDialog" parent="." unique_id=1094595648]
 unique_name_in_owner = true
 oversampling_override = 1.0
@@ -119,6 +125,32 @@ text = "res://workspace/config_data/example_map_game_config.tres"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Choose Save Dir"
+
+[node name="ExportFolderRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HeaderSection" unique_id=1552068584]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ExportFolderLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=483943866]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Folder Export Path: "
+
+[node name="ExportFolderValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=2124759901]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "res://workspace/exports"
+
+[node name="ChooseExportFolderButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=1503588779]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Choose Export Folder"
+
+[node name="ExportPackButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderSection/ExportFolderRow" unique_id=2124425728]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Export Folder"
 
 [node name="SourceMapRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HeaderSection" unique_id=146990613]
 unique_name_in_owner = true

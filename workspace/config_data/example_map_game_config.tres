@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="TicketGameConfigData" format=3 uid="uid://chey83dy3hv"]
 
 [ext_resource type="Script" uid="uid://kyyhia4sfg41" path="res://ticket_map_editor/data/destination_ticket_config_data.gd" id="1_w616u"]
-[ext_resource type="Texture2D" uid="uid://b2oqe8oq2trtd" path="res://ticket_map_editor/examples/example_graph.jpg" id="2_mg2o5"]
+[ext_resource type="Texture2D" uid="uid://b2oqe8oq2trtd" path="res://workspace/img/example_graph.jpg" id="2_mg2o5"]
 [ext_resource type="Resource" uid="uid://2gm7tchym5mp" path="res://maps/map_data.tres" id="3_uhx1u"]
 [ext_resource type="Script" uid="uid://6wfvn15c0uyb" path="res://ticket_map_editor/data/ticket_game_config_data.gd" id="4_qag3h"]
 [ext_resource type="Script" uid="uid://bhr3fap04n2qe" path="res://ticket_map_editor/data/transport_card_config_data.gd" id="5_q6m0h"]

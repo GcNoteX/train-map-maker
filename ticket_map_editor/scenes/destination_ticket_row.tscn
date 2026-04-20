@@ -22,8 +22,9 @@ text = "Include"
 
 [node name="PointsSpinBox" type="SpinBox" parent="." unique_id=635301144]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 0)
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
+suffix = "points"
 
 [node name="FromCityOptionButton" type="OptionButton" parent="." unique_id=624537001]
 unique_name_in_owner = true
@@ -53,12 +54,14 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 text = "Select Image"
+autowrap_mode = 3
 
 [node name="ClearImageButton" type="Button" parent="." unique_id=912841721]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 0)
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Clear Image"
+autowrap_mode = 2
 
 [node name="RemoveButton" type="Button" parent="." unique_id=72654560]
 unique_name_in_owner = true

@@ -49,11 +49,11 @@ class_name TicketMapEditor
 @export_category("Export")
 @export var normalize_to_positive_coordinates: bool = true
 
-@export_file("*.json") var export_json_path: String = "res://workspace/exports/example_map.json":
+@export_file("*.json") var export_json_path: String = "res://workspace/exports/ticket_map.json":
 	set(value):
 		export_json_path = value
 
-@export_file("*.tres") var export_map_data_resource_path: String = "res://workspace/map_data/example_map_data.tres":
+@export_file("*.tres") var export_map_data_resource_path: String = "res://workspace/map_data/ticket_map_data.tres":
 	set(value):
 		export_map_data_resource_path = value
 
@@ -92,7 +92,6 @@ func _refresh_default_export_paths_from_map_id() -> void:
 func _should_auto_update_json_path() -> bool:
 	return (
 		export_json_path.is_empty()
-		or export_json_path == "res://workspace/exports/example_map.json"
 		or export_json_path == "res://workspace/exports/ticket_map.json"
 	)
 
@@ -100,7 +99,6 @@ func _should_auto_update_map_data_path() -> bool:
 	return (
 		export_map_data_resource_path.is_empty()
 		or export_map_data_resource_path == "res://workspace/map_data/map_data.tres"
-		or export_map_data_resource_path == "res://workspace/map_data/example_map_data.tres"
 		or export_map_data_resource_path == "res://workspace/map_data/ticket_map_map_data.tres"
 	)
 

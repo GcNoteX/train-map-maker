@@ -1,0 +1,118 @@
+[gd_resource type="Resource" script_class="TicketMapData" format=3 uid="uid://de87wemw1i3wm"]
+
+[ext_resource type="Script" uid="uid://bohgs1026w8jg" path="res://ticket_map_editor/data/ticket_city_data.gd" id="1_fuexg"]
+[ext_resource type="Script" uid="uid://cxqa3og3i7wrj" path="res://ticket_map_editor/data/ticket_route_data.gd" id="2_mi66l"]
+[ext_resource type="Script" uid="uid://xu0bxnf7yob6" path="res://ticket_map_editor/data/ticket_segment_point_data.gd" id="3_fpkq5"]
+[ext_resource type="Script" uid="uid://0ahe0k73kqt" path="res://ticket_map_editor/data/ticket_map_data.gd" id="4_iovya"]
+
+[sub_resource type="Resource" id="Resource_ug18i"]
+script = ExtResource("1_fuexg")
+city_id = "city_1"
+display_name = "City 1"
+position = Vector2(120, 266)
+
+[sub_resource type="Resource" id="Resource_hq3dy"]
+script = ExtResource("1_fuexg")
+city_id = "city_2"
+display_name = "City 2"
+position = Vector2(375, 67)
+
+[sub_resource type="Resource" id="Resource_h1ayf"]
+script = ExtResource("1_fuexg")
+city_id = "city_3"
+display_name = "City 3"
+position = Vector2(75, 62)
+
+[sub_resource type="Resource" id="Resource_t5pwk"]
+script = ExtResource("3_fpkq5")
+position = Vector2(183, 261)
+rotation_radians = 0.05258306
+
+[sub_resource type="Resource" id="Resource_kln0a"]
+script = ExtResource("3_fpkq5")
+index = 1
+position = Vector2(253, 273)
+rotation_radians = -0.10979292
+
+[sub_resource type="Resource" id="Resource_dxulm"]
+script = ExtResource("3_fpkq5")
+index = 2
+position = Vector2(310, 247)
+rotation_radians = -0.9902749
+
+[sub_resource type="Resource" id="Resource_w78qn"]
+script = ExtResource("3_fpkq5")
+index = 3
+position = Vector2(314, 180)
+rotation_radians = -1.4175946
+
+[sub_resource type="Resource" id="Resource_hsq4l"]
+script = ExtResource("3_fpkq5")
+index = 4
+position = Vector2(331, 111)
+rotation_radians = -1.0758001
+
+[sub_resource type="Resource" id="Resource_pgd11"]
+script = ExtResource("2_mi66l")
+node_name = "City_1_to_City_2"
+from_city_id = "city_1"
+to_city_id = "city_2"
+route_length = 5
+cart_type = "BLUE"
+points = Array[Vector2]([Vector2(120, 266), Vector2(183, 261), Vector2(253, 273), Vector2(310, 247), Vector2(314, 180), Vector2(331, 111), Vector2(375, 67)])
+segment_points = Array[ExtResource("3_fpkq5")]([SubResource("Resource_t5pwk"), SubResource("Resource_kln0a"), SubResource("Resource_dxulm"), SubResource("Resource_w78qn"), SubResource("Resource_hsq4l")])
+
+[sub_resource type="Resource" id="Resource_0k38j"]
+script = ExtResource("3_fpkq5")
+position = Vector2(104, 198)
+rotation_radians = -1.8209207
+
+[sub_resource type="Resource" id="Resource_176au"]
+script = ExtResource("3_fpkq5")
+index = 1
+position = Vector2(85, 129)
+rotation_radians = -1.7808851
+
+[sub_resource type="Resource" id="Resource_5iecd"]
+script = ExtResource("2_mi66l")
+node_name = "City_1_to_City_3"
+from_city_id = "city_1"
+to_city_id = "city_3"
+route_length = 2
+cart_type = "RED"
+points = Array[Vector2]([Vector2(120, 266), Vector2(104, 198), Vector2(85, 129), Vector2(75, 62)])
+segment_points = Array[ExtResource("3_fpkq5")]([SubResource("Resource_0k38j"), SubResource("Resource_176au")])
+
+[sub_resource type="Resource" id="Resource_xq74b"]
+script = ExtResource("3_fpkq5")
+position = Vector2(291, 61)
+rotation_radians = -3.0961695
+
+[sub_resource type="Resource" id="Resource_amt3e"]
+script = ExtResource("3_fpkq5")
+index = 1
+position = Vector2(221, 60)
+rotation_radians = -3.13445
+
+[sub_resource type="Resource" id="Resource_rnjg5"]
+script = ExtResource("3_fpkq5")
+index = 2
+position = Vector2(151, 60)
+rotation_radians = 3.1278949
+
+[sub_resource type="Resource" id="Resource_xyaxw"]
+script = ExtResource("2_mi66l")
+node_name = "City_2_to_City_3"
+from_city_id = "city_2"
+to_city_id = "city_3"
+route_length = 3
+cart_type = "GREEN"
+points = Array[Vector2]([Vector2(375, 67), Vector2(291, 61), Vector2(221, 60), Vector2(151, 60), Vector2(75, 62)])
+segment_points = Array[ExtResource("3_fpkq5")]([SubResource("Resource_xq74b"), SubResource("Resource_amt3e"), SubResource("Resource_rnjg5")])
+
+[resource]
+script = ExtResource("4_iovya")
+map_id = "example_map"
+map_size = Vector2(953, 612)
+cities = Array[ExtResource("1_fuexg")]([SubResource("Resource_ug18i"), SubResource("Resource_hq3dy"), SubResource("Resource_h1ayf")])
+routes = Array[ExtResource("2_mi66l")]([SubResource("Resource_pgd11"), SubResource("Resource_5iecd"), SubResource("Resource_xyaxw")])

@@ -1,18 +1,17 @@
 [gd_resource type="Resource" script_class="TicketGameConfigData" format=3 uid="uid://3ol1c06u8ovk"]
 
 [ext_resource type="Script" uid="uid://kyyhia4sfg41" path="res://ticket_map_editor/data/destination_ticket_config_data.gd" id="1_wmlej"]
-[ext_resource type="Texture2D" uid="uid://b2oqe8oq2trtd" path="res://ticket_map_editor/examples/example_graph.jpg" id="2_5lnbr"]
+[ext_resource type="Texture2D" uid="uid://b2oqe8oq2trtd" path="res://workspace/img/example_graph.jpg" id="2_kueqp"]
 [ext_resource type="Resource" uid="uid://2gm7tchym5mp" path="res://maps/map_data.tres" id="3_la1lw"]
 [ext_resource type="Script" uid="uid://6wfvn15c0uyb" path="res://ticket_map_editor/data/ticket_game_config_data.gd" id="4_s7ho2"]
 [ext_resource type="Script" uid="uid://bhr3fap04n2qe" path="res://ticket_map_editor/data/transport_card_config_data.gd" id="5_rs55e"]
-[ext_resource type="Texture2D" uid="uid://cannk5fyhdkck" path="res://workspace/img/london_map.jpg" id="6_wmlej"]
 
 [sub_resource type="Resource" id="Resource_ni10h"]
 script = ExtResource("1_wmlej")
-points = 1
+points = 3
 from_city_id = "city_1"
 to_city_id = "city_3"
-image = ExtResource("2_5lnbr")
+image = ExtResource("2_kueqp")
 
 [sub_resource type="Resource" id="Resource_h7p20"]
 script = ExtResource("1_wmlej")
@@ -35,7 +34,6 @@ to_city_id = "city_1"
 script = ExtResource("5_rs55e")
 cart_type = "PURPLE"
 card_count = 6
-image = ExtResource("6_wmlej")
 
 [sub_resource type="Resource" id="Resource_pw5hr"]
 script = ExtResource("5_rs55e")

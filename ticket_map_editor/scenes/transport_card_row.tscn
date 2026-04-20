@@ -17,9 +17,8 @@ text = "Cart Type"
 
 [node name="CardCountSpinBox" type="SpinBox" parent="." unique_id=635301144]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-suffix = " points"
 
 [node name="ImagePreviewButton" type="Button" parent="." unique_id=2057624810]
 unique_name_in_owner = true
@@ -39,9 +38,11 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Select Image"
+autowrap_mode = 3
 
 [node name="ClearImageButton" type="Button" parent="." unique_id=951209681]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 0)
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Clear Image"
+autowrap_mode = 2

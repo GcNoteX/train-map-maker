@@ -14,6 +14,8 @@ class_name TicketGameConfigEditor
 		if is_node_ready():
 			_refresh_save_path_label()
 
+@export_dir var export_folder_path: String = "res://workspace/exports"
+
 @onready var image_file_dialog: FileDialog = %ImageFileDialog
 
 var _pending_transport_image_target: TransportCardConfigData = null
@@ -43,8 +45,14 @@ var _pending_destination_image_target: DestinationTicketConfigData = null
 @onready var add_destination_ticket_button: Button = %AddDestinationTicketButton
 @onready var save_config_resource_button: Button = %SaveConfigResourceButton
 
+@onready var export_folder_value_label: Label = %ExportFolderValueLabel
+@onready var choose_export_folder_button: Button = %ChooseExportFolderButton
+@onready var export_pack_button: Button = %ExportPackButton
+@onready var export_folder_dialog: FileDialog = %ExportFolderDialog
+
 const TRANSPORT_CARD_ROW_SCENE: PackedScene = preload("uid://cxg0fistnkjqe")
 const DESTINATION_TICKET_ROW_SCENE: PackedScene = preload("uid://bbsq8u3jd2sn5")
+var _image_export_cache: Dictionary = {}
 
 func _ready() -> void:
 	if not load_config_button.pressed.is_connected(_on_load_config_pressed):
@@ -77,9 +85,19 @@ func _ready() -> void:
 	if not image_file_dialog.file_selected.is_connected(_on_image_file_selected):
 		image_file_dialog.file_selected.connect(_on_image_file_selected)
 	
+	if not choose_export_folder_button.pressed.is_connected(_on_choose_export_folder_pressed):
+		choose_export_folder_button.pressed.connect(_on_choose_export_folder_pressed)
+
+	if not export_pack_button.pressed.is_connected(_on_export_pack_pressed):
+		export_pack_button.pressed.connect(_on_export_pack_pressed)
+
+	if not export_folder_dialog.dir_selected.is_connected(_on_export_folder_selected):
+		export_folder_dialog.dir_selected.connect(_on_export_folder_selected)
+	
 	_refresh_ui_from_config()
 	_refresh_config_resource_label()
 	_refresh_save_path_label()
+	_refresh_export_folder_label()
 
 ## Rebuilds the editor UI from the current config resource.
 func _refresh_ui_from_config() -> void:
@@ -522,3 +540,226 @@ func _sanitize_file_name(value: String) -> String:
 	result = result.trim_suffix("_")
 
 	return result
+
+func _refresh_export_folder_label() -> void:
+	if not is_node_ready():
+		return
+
+	export_folder_value_label.text = export_folder_path if not export_folder_path.is_empty() else "No export folder selected"
+
+func _on_choose_export_folder_pressed() -> void:
+	export_folder_dialog.current_dir = export_folder_path if not export_folder_path.is_empty() else "res://workspace/exports"
+	export_folder_dialog.popup_centered_ratio()
+
+func _on_export_folder_selected(dir_path: String) -> void:
+	export_folder_path = dir_path
+	_refresh_export_folder_label()
+
+func _on_export_pack_pressed() -> void:
+	if config_data == null:
+		push_error("No config_data assigned.")
+		return
+
+	if config_data.map_data == null:
+		push_error("No map_data assigned to config_data.")
+		return
+
+	if export_folder_path.is_empty():
+		push_error("No export folder selected.")
+		return
+
+	var safe_map_id: String = _sanitize_file_name(config_data.map_data.map_id)
+	if safe_map_id.is_empty():
+		safe_map_id = "ticket_map"
+
+	var pack_root: String = export_folder_path.path_join("%s_export" % safe_map_id)
+	var img_dir: String = pack_root.path_join("img")
+	var config_json_path: String = pack_root.path_join("config.json")
+
+	if not _ensure_directory_exists(pack_root):
+		return
+
+	if not _ensure_directory_exists(img_dir):
+		return
+
+	_image_export_cache.clear()
+
+	var export_dict: Dictionary = _build_final_export_dictionary(img_dir)
+
+	var file: FileAccess = FileAccess.open(config_json_path, FileAccess.WRITE)
+	if file == null:
+		push_error("Failed to open export json path: %s" % config_json_path)
+		return
+
+	file.store_string(JSON.stringify(export_dict, "\t"))
+	file.close()
+
+	print("Exported final config pack to: %s" % pack_root)
+
+func _ensure_directory_exists(path: String) -> bool:
+	if DirAccess.dir_exists_absolute(path):
+		return true
+
+	var error: Error = DirAccess.make_dir_recursive_absolute(path)
+	if error != OK:
+		push_error("Failed to create directory: %s (error code %d)" % [path, error])
+		return false
+
+	return true
+
+func _build_final_export_dictionary(img_dir: String) -> Dictionary:
+	return {
+		"map": _build_map_export_dictionary(config_data.map_data),
+		"game_config": {
+			"trains_per_player": config_data.trains_per_player,
+			"transport_cards": _build_transport_card_export_array(img_dir),
+			"destination_tickets": _build_destination_ticket_export_array(img_dir)
+		}
+	}
+
+func _build_map_export_dictionary(map_data: TicketMapData) -> Dictionary:
+	var cities: Array = []
+	for city_data in map_data.cities:
+		cities.append({
+			"id": city_data.city_id,
+			"display_name": city_data.display_name,
+			"position": _vec2_to_dict(city_data.position)
+		})
+
+	var routes: Array = []
+	for route_data in map_data.routes:
+		var points: Array = []
+		for point in route_data.points:
+			points.append(_vec2_to_dict(point))
+
+		var segment_points: Array = []
+		for segment_data in route_data.segment_points:
+			segment_points.append({
+				"index": segment_data.index,
+				"position": _vec2_to_dict(segment_data.position),
+				"rotation_radians": segment_data.rotation_radians
+			})
+
+		routes.append({
+			"node_name": route_data.node_name,
+			"from_city_id": route_data.from_city_id,
+			"to_city_id": route_data.to_city_id,
+			"route_length": route_data.route_length,
+			"cart_type": route_data.cart_type,
+			"points": points,
+			"segment_points": segment_points
+		})
+
+	return {
+		"map_id": map_data.map_id,
+		"map_size": _vec2_to_dict(map_data.map_size),
+		"normalized": map_data.normalized,
+		"normalization_offset": _vec2_to_dict(map_data.normalization_offset),
+		"cities": cities,
+		"routes": routes
+	}
+func _build_transport_card_export_array(img_dir: String) -> Array:
+	var result: Array = []
+
+	for entry in config_data.transport_cards:
+		var relative_image_path: String = ""
+		if entry.image != null:
+			relative_image_path = _export_texture_once(
+				entry.image,
+				img_dir,
+				"transport_%s" % entry.cart_type.to_lower()
+			)
+
+		result.append({
+			"cart_type": entry.cart_type,
+			"card_count": entry.card_count,
+			"image_path": relative_image_path
+		})
+
+	return result
+
+func _build_destination_ticket_export_array(img_dir: String) -> Array:
+	var result: Array = []
+	var enabled_index: int = 1
+
+	for entry in config_data.destination_tickets:
+		if not entry.enabled:
+			continue
+
+		var relative_image_path: String = ""
+		if entry.image != null:
+			relative_image_path = _export_texture_once(
+				entry.image,
+				img_dir,
+				"destination_%02d" % enabled_index
+			)
+
+		result.append({
+			"points": entry.points,
+			"from_city_id": entry.from_city_id,
+			"to_city_id": entry.to_city_id,
+			"image_path": relative_image_path
+		})
+
+		enabled_index += 1
+
+	return result
+
+func _export_texture_once(texture: Texture2D, img_dir: String, target_base_name: String) -> String:
+	if texture == null:
+		return ""
+
+	var source_path: String = texture.resource_path
+	if source_path.is_empty():
+		push_error("Texture has no resource_path and cannot be exported.")
+		return ""
+
+	if _image_export_cache.has(source_path):
+		return _image_export_cache[source_path]
+
+	var extension: String = source_path.get_extension().to_lower()
+	if extension.is_empty():
+		extension = "png"
+
+	var file_name: String = "%s.%s" % [target_base_name, extension]
+	var target_path: String = img_dir.path_join(file_name)
+	var relative_path: String = "img/%s" % file_name
+
+	# Make sure we do not overwrite a different image with the same target name.
+	var suffix: int = 2
+	while FileAccess.file_exists(target_path):
+		var existing_relative_path: String = "img/%s" % target_path.get_file()
+
+		# If the existing target path is already the cached output for this same source, reuse it.
+		if _image_export_cache.has(source_path) and _image_export_cache[source_path] == existing_relative_path:
+			return existing_relative_path
+
+		file_name = "%s_%d.%s" % [target_base_name, suffix, extension]
+		target_path = img_dir.path_join(file_name)
+		relative_path = "img/%s" % file_name
+		suffix += 1
+
+	var source_file: FileAccess = FileAccess.open(source_path, FileAccess.READ)
+	if source_file == null:
+		push_error("Failed to open source image: %s" % source_path)
+		return ""
+
+	var bytes: PackedByteArray = source_file.get_buffer(source_file.get_length())
+	source_file.close()
+
+	var target_file: FileAccess = FileAccess.open(target_path, FileAccess.WRITE)
+	if target_file == null:
+		push_error("Failed to open target image path: %s" % target_path)
+		return ""
+
+	target_file.store_buffer(bytes)
+	target_file.close()
+
+	_image_export_cache[source_path] = relative_path
+	return relative_path
+
+func _vec2_to_dict(value: Vector2) -> Dictionary:
+	return {
+		"x": value.x,
+		"y": value.y
+	}
