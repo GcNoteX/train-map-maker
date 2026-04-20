@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://covv14jwjwgis"]
 
-[ext_resource type="Script" uid="uid://c1j4vblt6kx2r" path="res://city_node.gd" id="1_7nx4q"]
+[ext_resource type="Script" uid="uid://c1j4vblt6kx2r" path="res://ticket_map_editor/core/city_node.gd" id="1_7nx4q"]
 
 [node name="CityNode" type="Node2D" unique_id=871134643]
 script = ExtResource("1_7nx4q")

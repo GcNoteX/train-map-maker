@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://085y77hrhfnx"]
 
-[ext_resource type="Script" uid="uid://exsfuqnh14jk" path="res://route_node.gd" id="1_rpcg5"]
+[ext_resource type="Script" uid="uid://exsfuqnh14jk" path="res://ticket_map_editor/core/route_node.gd" id="1_rpcg5"]
 
 [node name="RouteNode" type="Line2D" unique_id=612778987]
 points = PackedVector2Array(0, 0, 72, 0, 72, 0, 72, 0, 144, 0)

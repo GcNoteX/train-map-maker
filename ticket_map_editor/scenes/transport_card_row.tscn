@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cxg0fistnkjqe"]
 
-[ext_resource type="Script" uid="uid://csgdnrwu35utt" path="res://transport_card_row.gd" id="1_mdvob"]
+[ext_resource type="Script" uid="uid://csgdnrwu35utt" path="res://ticket_map_editor/ui/transport_card_row.gd" id="1_mdvob"]
 
 [node name="TransportCardRow" type="HBoxContainer" unique_id=1766484148]
 offset_right = 96.0
@@ -17,8 +17,9 @@ text = "Cart Type"
 
 [node name="CardCountSpinBox" type="SpinBox" parent="." unique_id=635301144]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(70, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
+suffix = " points"
 
 [node name="ImagePreviewButton" type="Button" parent="." unique_id=2057624810]
 unique_name_in_owner = true

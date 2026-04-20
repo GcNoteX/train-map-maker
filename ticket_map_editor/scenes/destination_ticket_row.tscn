@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bbsq8u3jd2sn5"]
 
-[ext_resource type="Script" uid="uid://ds304wes7r3oy" path="res://destination_ticket_row.gd" id="1_dcrxp"]
+[ext_resource type="Script" uid="uid://ds304wes7r3oy" path="res://ticket_map_editor/ui/destination_ticket_row.gd" id="1_dcrxp"]
 
 [node name="DestinationTicketRow" type="HBoxContainer" unique_id=1766484148]
 offset_right = 272.0

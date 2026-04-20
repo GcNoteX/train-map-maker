@@ -3,7 +3,10 @@ extends Node2D
 class_name TicketMapEditor
 
 @export_category("Map Data")
-@export var map_id: String = "ticket_map"
+@export var map_id: String = "ticket_map":
+	set(value):
+		map_id = value
+		_refresh_default_export_paths_from_map_id()
 
 @export var map_size: Vector2 = Vector2(1200, 800):
 	set(value):
@@ -46,8 +49,13 @@ class_name TicketMapEditor
 @export_category("Export")
 @export var normalize_to_positive_coordinates: bool = true
 
-@export_file("*.json") var export_json_path: String = "res://maps/example_map.json"
-@export_file("*.tres") var export_map_data_resource_path: String = "res://maps/map_data.tres"
+@export_file("*.json") var export_json_path: String = "res://workspace/exports/example_map.json":
+	set(value):
+		export_json_path = value
+
+@export_file("*.tres") var export_map_data_resource_path: String = "res://workspace/map_data/example_map_data.tres":
+	set(value):
+		export_map_data_resource_path = value
 
 @onready var background_sprite: Sprite2D = $BackgroundSprite
 @onready var cities_root: Node2D = $Cities
@@ -59,8 +67,70 @@ var export_map_json_action := _export_map_json
 var export_map_data_resource_action := _export_map_data_resource
 
 func _ready() -> void:
+	_refresh_default_export_paths_from_map_id()
 	_refresh_background()
 	queue_redraw()
+
+## Updates default export paths from map_id without overwriting clearly custom paths.
+func _refresh_default_export_paths_from_map_id() -> void:
+	if not is_node_ready():
+		return
+
+	var safe_map_id: String = _sanitize_file_name(map_id)
+	if safe_map_id.is_empty():
+		safe_map_id = "ticket_map"
+
+	var default_json_path: String = "res://workspace/exports/%s.json" % safe_map_id
+	var default_tres_path: String = "res://workspace/map_data/%s_map_data.tres" % safe_map_id
+
+	if _should_auto_update_json_path():
+		export_json_path = default_json_path
+
+	if _should_auto_update_map_data_path():
+		export_map_data_resource_path = default_tres_path
+
+func _should_auto_update_json_path() -> bool:
+	return (
+		export_json_path.is_empty()
+		or export_json_path == "res://workspace/exports/example_map.json"
+		or export_json_path == "res://workspace/exports/ticket_map.json"
+	)
+
+func _should_auto_update_map_data_path() -> bool:
+	return (
+		export_map_data_resource_path.is_empty()
+		or export_map_data_resource_path == "res://workspace/map_data/map_data.tres"
+		or export_map_data_resource_path == "res://workspace/map_data/example_map_data.tres"
+		or export_map_data_resource_path == "res://workspace/map_data/ticket_map_map_data.tres"
+	)
+
+func _sanitize_file_name(value: String) -> String:
+	var result: String = value.strip_edges().to_lower()
+
+	result = result.replace(" ", "_")
+	result = result.replace("-", "_")
+	result = result.replace("/", "_")
+	result = result.replace("\\", "_")
+	result = result.replace(":", "_")
+	result = result.replace("*", "_")
+	result = result.replace("?", "_")
+	result = result.replace("\"", "_")
+	result = result.replace("<", "_")
+	result = result.replace(">", "_")
+	result = result.replace("|", "_")
+	result = result.replace(".", "_")
+	result = result.replace(",", "_")
+	result = result.replace("(", "_")
+	result = result.replace(")", "_")
+	result = result.replace("&", "and")
+
+	while "__" in result:
+		result = result.replace("__", "_")
+
+	result = result.trim_prefix("_")
+	result = result.trim_suffix("_")
+
+	return result
 
 func _draw() -> void:
 	if not show_map_bounds:

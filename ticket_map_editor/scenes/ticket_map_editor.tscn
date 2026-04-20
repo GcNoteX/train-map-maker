@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://by0bwnhni22qc"]
 
-[ext_resource type="Script" uid="uid://bf25eggrlu01v" path="res://ticket_map_editor.gd" id="1_522j3"]
-[ext_resource type="PackedScene" uid="uid://covv14jwjwgis" path="res://CityNode.tscn" id="2_l7xwy"]
-[ext_resource type="Script" uid="uid://cvr8uh7y0ljo0" path="res://editor_name_sync.gd" id="2_mpclr"]
-[ext_resource type="Texture2D" uid="uid://b2oqe8oq2trtd" path="res://example_graph.jpg" id="2_uyhb5"]
-[ext_resource type="PackedScene" uid="uid://085y77hrhfnx" path="res://RouteNode.tscn" id="3_1n01n"]
+[ext_resource type="Script" uid="uid://bf25eggrlu01v" path="res://ticket_map_editor/core/ticket_map_editor.gd" id="1_522j3"]
+[ext_resource type="PackedScene" uid="uid://covv14jwjwgis" path="res://ticket_map_editor/scenes/city_node.tscn" id="2_l7xwy"]
+[ext_resource type="Script" uid="uid://cvr8uh7y0ljo0" path="res://ticket_map_editor/core/editor_name_sync.gd" id="2_mpclr"]
+[ext_resource type="Texture2D" uid="uid://b2oqe8oq2trtd" path="res://ticket_map_editor/examples/example_graph.jpg" id="2_uyhb5"]
+[ext_resource type="PackedScene" uid="uid://085y77hrhfnx" path="res://ticket_map_editor/scenes/route_node.tscn" id="3_1n01n"]
 
 [node name="TicketMapEditor" type="Node2D" unique_id=223255503]
 script = ExtResource("1_522j3")

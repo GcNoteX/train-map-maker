@@ -8,7 +8,11 @@ class_name TicketGameConfigEditor
 		config_data = value
 		_refresh_ui_from_config()
 
-@export_file("*.tres") var save_config_resource_path: String = "res://map_configs/game_config.tres"
+@export_file("*.tres") var save_config_resource_path: String = "res://workspace/config_data/game_config.tres":
+	set(value):
+		save_config_resource_path = value
+		if is_node_ready():
+			_refresh_save_path_label()
 
 @onready var image_file_dialog: FileDialog = %ImageFileDialog
 
@@ -102,6 +106,7 @@ func _refresh_ui_from_config() -> void:
 	_build_transport_card_rows()
 	_build_destination_ticket_rows()
 	_refresh_destination_ticket_counter()
+	_refresh_default_config_save_path_from_map_data()
 	_refresh_config_resource_label()
 	_refresh_save_path_label()
 
@@ -119,6 +124,7 @@ func _on_create_default_config_pressed() -> void:
 	config_data = new_config
 
 	_refresh_ui_from_config()
+	_refresh_default_config_save_path_from_map_data()
 	_refresh_config_resource_label()
 	_refresh_save_path_label()
 
@@ -392,7 +398,9 @@ func _on_new_config_pressed() -> void:
 
 	config_data = new_config
 	_refresh_ui_from_config()
+	_refresh_default_config_save_path_from_map_data()
 	_refresh_config_resource_label()
+	_refresh_save_path_label()
 
 func _on_choose_save_path_pressed() -> void:
 	save_config_file_dialog.current_file = save_config_resource_path.get_file()
@@ -463,3 +471,54 @@ func _build_destination_ticket_warning_map() -> Dictionary:
 				warning_map[entry] = "Duplicate city combination with another row."
 
 	return warning_map
+
+func _refresh_default_config_save_path_from_map_data() -> void:
+	if not is_node_ready():
+		return
+
+	if config_data == null or config_data.map_data == null:
+		return
+
+	var safe_map_id: String = _sanitize_file_name(config_data.map_data.map_id)
+	if safe_map_id.is_empty():
+		safe_map_id = "ticket_map"
+
+	var default_save_path: String = "res://workspace/config_data/%s_game_config.tres" % safe_map_id
+
+	if _should_auto_update_config_save_path():
+		save_config_resource_path = default_save_path
+
+func _should_auto_update_config_save_path() -> bool:
+	return (
+		save_config_resource_path.is_empty()
+		or save_config_resource_path == "res://workspace/config_data/game_config.tres"
+		or save_config_resource_path == "res://workspace/config_data/ticket_map_game_config.tres"
+	)
+
+func _sanitize_file_name(value: String) -> String:
+	var result: String = value.strip_edges().to_lower()
+
+	result = result.replace(" ", "_")
+	result = result.replace("-", "_")
+	result = result.replace("/", "_")
+	result = result.replace("\\", "_")
+	result = result.replace(":", "_")
+	result = result.replace("*", "_")
+	result = result.replace("?", "_")
+	result = result.replace("\"", "_")
+	result = result.replace("<", "_")
+	result = result.replace(">", "_")
+	result = result.replace("|", "_")
+	result = result.replace(".", "_")
+	result = result.replace(",", "_")
+	result = result.replace("(", "_")
+	result = result.replace(")", "_")
+	result = result.replace("&", "and")
+
+	while "__" in result:
+		result = result.replace("__", "_")
+
+	result = result.trim_prefix("_")
+	result = result.trim_suffix("_")
+
+	return result
