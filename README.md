@@ -166,7 +166,7 @@ res://
 ├── README.md
 ├── LICENSE
 └── project.godot
-
+```
 ### Main areas
 
 #### `addons/ticket_map_editor/`
