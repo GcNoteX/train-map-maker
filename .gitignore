@@ -16,5 +16,5 @@ data_*/
 mono_crash.*.json
 
 # Specific for project
-london_*
-maps/london_*
+*london*
+*London*

@@ -30,7 +30,6 @@ metadata/_edit_lock_ = true
 position = Vector2(120, 266)
 city_id = "city_1"
 display_name = "City 1"
-use_node_name_for_label = false
 marker_radius = 18.0
 marker_color = Color(0.118796654, 0.5113481, 0.89536375, 1)
 
@@ -38,14 +37,12 @@ marker_color = Color(0.118796654, 0.5113481, 0.89536375, 1)
 position = Vector2(375, 67)
 city_id = "city_2"
 display_name = "City 2"
-use_node_name_for_label = false
 marker_radius = 18.0
 
 [node name="City_3" parent="Cities" unique_id=868953137 instance=ExtResource("2_l7xwy")]
 position = Vector2(75, 62)
 city_id = "city_3"
 display_name = "City 3"
-use_node_name_for_label = false
 marker_radius = 18.0
 marker_color = Color(0.40692228, 0.41351697, 1, 1)
 

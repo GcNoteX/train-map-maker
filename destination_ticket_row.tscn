@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://bbsq8u3jd2sn5"]
+
+[ext_resource type="Script" uid="uid://ds304wes7r3oy" path="res://destination_ticket_row.gd" id="1_dcrxp"]
+
+[node name="DestinationTicketRow" type="HBoxContainer" unique_id=1766484148]
+offset_right = 272.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+script = ExtResource("1_dcrxp")
+
+[node name="RowNumberLabel" type="Label" parent="." unique_id=423250583]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "1. "
+
+[node name="EnabledCheckBox" type="CheckBox" parent="." unique_id=1839959082]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "Include"
+
+[node name="PointsSpinBox" type="SpinBox" parent="." unique_id=635301144]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+
+[node name="FromCityOptionButton" type="OptionButton" parent="." unique_id=624537001]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ToCityOptionButton" type="OptionButton" parent="." unique_id=57982582]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ImagePreviewButton" type="Button" parent="." unique_id=345038063]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+text = "Preview Image"
+expand_icon = true
+
+[node name="ImagePathLabel" type="Label" parent="." unique_id=1196000791]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
+
+[node name="SelectImageButton" type="Button" parent="." unique_id=395050167]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Select Image"
+
+[node name="ClearImageButton" type="Button" parent="." unique_id=912841721]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Clear Image"
+
+[node name="RemoveButton" type="Button" parent="." unique_id=72654560]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Remove"

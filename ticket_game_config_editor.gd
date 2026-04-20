@@ -1,0 +1,465 @@
+@tool
+extends Control
+class_name TicketGameConfigEditor
+
+@export_category("Data")
+@export var config_data: TicketGameConfigData = null:
+	set(value):
+		config_data = value
+		_refresh_ui_from_config()
+
+@export_file("*.tres") var save_config_resource_path: String = "res://map_configs/game_config.tres"
+
+@onready var image_file_dialog: FileDialog = %ImageFileDialog
+
+var _pending_transport_image_target: TransportCardConfigData = null
+var _pending_destination_image_target: DestinationTicketConfigData = null
+
+@onready var config_resource_path_label: Label = %ConfigResourcePathLabel
+@onready var load_config_button: Button = %LoadConfigButton
+@onready var new_config_button: Button = %NewConfigButton
+
+@onready var save_path_value_label: Label = %SavePathValueLabel
+@onready var choose_save_path_button: Button = %ChooseSavePathButton
+
+@onready var load_config_file_dialog: FileDialog = %LoadConfigFileDialog
+@onready var save_config_file_dialog: FileDialog = %SaveConfigFileDialog
+
+@onready var image_preview_popup: AcceptDialog = %ImagePreviewPopup
+@onready var preview_path_label: Label = %PreviewPathLabel
+@onready var preview_texture_rect: TextureRect = %PreviewTextureRect
+
+@onready var source_map_value_label: Label = %SourceMapValueLabel
+@onready var trains_spin_box: SpinBox = %TrainsSpinBox
+@onready var destination_count_label: Label = %DestinationCountLabel
+@onready var transport_cards_container: VBoxContainer = %TransportCardsContainer
+@onready var destination_tickets_container: VBoxContainer = %DestinationTicketsContainer
+
+@onready var create_default_config_button: Button = %CreateDefaultConfigButton
+@onready var add_destination_ticket_button: Button = %AddDestinationTicketButton
+@onready var save_config_resource_button: Button = %SaveConfigResourceButton
+
+const TRANSPORT_CARD_ROW_SCENE: PackedScene = preload("uid://cxg0fistnkjqe")
+const DESTINATION_TICKET_ROW_SCENE: PackedScene = preload("uid://bbsq8u3jd2sn5")
+
+func _ready() -> void:
+	if not load_config_button.pressed.is_connected(_on_load_config_pressed):
+		load_config_button.pressed.connect(_on_load_config_pressed)
+
+	if not new_config_button.pressed.is_connected(_on_new_config_pressed):
+		new_config_button.pressed.connect(_on_new_config_pressed)
+
+	if not choose_save_path_button.pressed.is_connected(_on_choose_save_path_pressed):
+		choose_save_path_button.pressed.connect(_on_choose_save_path_pressed)
+
+	if not load_config_file_dialog.file_selected.is_connected(_on_load_config_file_selected):
+		load_config_file_dialog.file_selected.connect(_on_load_config_file_selected)
+
+	if not save_config_file_dialog.file_selected.is_connected(_on_save_config_file_selected):
+		save_config_file_dialog.file_selected.connect(_on_save_config_file_selected)
+	
+	if not create_default_config_button.pressed.is_connected(_on_create_default_config_pressed):
+		create_default_config_button.pressed.connect(_on_create_default_config_pressed)
+
+	if not add_destination_ticket_button.pressed.is_connected(_on_add_destination_ticket_pressed):
+		add_destination_ticket_button.pressed.connect(_on_add_destination_ticket_pressed)
+
+	if not save_config_resource_button.pressed.is_connected(_on_save_config_resource_pressed):
+		save_config_resource_button.pressed.connect(_on_save_config_resource_pressed)
+
+	if not trains_spin_box.value_changed.is_connected(_on_trains_per_player_changed):
+		trains_spin_box.value_changed.connect(_on_trains_per_player_changed)
+	
+	if not image_file_dialog.file_selected.is_connected(_on_image_file_selected):
+		image_file_dialog.file_selected.connect(_on_image_file_selected)
+	
+	_refresh_ui_from_config()
+	_refresh_config_resource_label()
+	_refresh_save_path_label()
+
+## Rebuilds the editor UI from the current config resource.
+func _refresh_ui_from_config() -> void:
+	if not is_node_ready():
+		return
+
+	_clear_container(transport_cards_container)
+	_clear_container(destination_tickets_container)
+	
+
+	if config_data == null:
+		source_map_value_label.text = "No config assigned"
+		destination_count_label.text = "Destination Tickets: 0 total / 0 enabled"
+		trains_spin_box.value = 45
+		return
+
+	trains_spin_box.value = config_data.trains_per_player
+
+	if config_data.map_data != null:
+		source_map_value_label.text = "%s" % config_data.map_data.map_id
+	else:
+		source_map_value_label.text = "No map data assigned"
+
+	_build_transport_card_rows()
+	_build_destination_ticket_rows()
+	_refresh_destination_ticket_counter()
+	_refresh_config_resource_label()
+	_refresh_save_path_label()
+
+## Creates a fresh default config from the current map data if possible.
+func _on_create_default_config_pressed() -> void:
+	if config_data == null:
+		config_data = TicketGameConfigData.new()
+
+	if config_data.map_data == null:
+		push_error("Cannot create default config without map_data assigned.")
+		return
+
+	var new_config: TicketGameConfigData = TicketGameConfigFactory.build_default_config(config_data.map_data)
+	new_config.map_data = config_data.map_data
+	config_data = new_config
+
+	_refresh_ui_from_config()
+	_refresh_config_resource_label()
+	_refresh_save_path_label()
+
+## Adds a new destination ticket row/resource.
+func _on_add_destination_ticket_pressed() -> void:
+	if config_data == null:
+		push_error("Assign or create a config first.")
+		return
+
+	if config_data.map_data == null:
+		push_error("Assign map_data before adding destination tickets.")
+		return
+
+	var entry := DestinationTicketConfigData.new()
+	entry.enabled = true
+	entry.points = 0
+
+	var city_ids: Array[String] = _get_city_ids_from_map_data()
+	if city_ids.size() >= 1:
+		entry.from_city_id = city_ids[0]
+		entry.to_city_id = city_ids[0]
+
+	config_data.destination_tickets.append(entry)
+	_build_destination_ticket_rows()
+	_refresh_destination_ticket_counter()
+
+## Saves the config resource as a .tres, creating the folder/file if needed.
+func _on_save_config_resource_pressed() -> void:
+	if config_data == null:
+		push_error("No config_data to save.")
+		return
+
+	if save_config_resource_path.is_empty():
+		push_error("No save path selected.")
+		return
+
+	if not save_config_resource_path.ends_with(".tres"):
+		save_config_resource_path += ".tres"
+
+	if not _ensure_config_directory_exists():
+		return
+
+	var file_already_exists: bool = FileAccess.file_exists(save_config_resource_path)
+
+	var result: Error = ResourceSaver.save(config_data, save_config_resource_path)
+	if result != OK:
+		push_error("Failed to save config resource: %s (error code %d)" % [save_config_resource_path, result])
+		return
+
+	if file_already_exists:
+		print("Updated config resource at: %s" % save_config_resource_path)
+	else:
+		print("Created new config resource at: %s" % save_config_resource_path)
+
+	_refresh_config_resource_label()
+	_refresh_save_path_label()
+
+func _on_trains_per_player_changed(value: float) -> void:
+	if config_data == null:
+		return
+
+	config_data.trains_per_player = int(value)
+
+## Builds rows for each transport card config entry.
+func _build_transport_card_rows() -> void:
+	if config_data == null:
+		return
+
+	_clear_container(transport_cards_container)
+
+	for entry in config_data.transport_cards:
+		var row: TransportCardRow = TRANSPORT_CARD_ROW_SCENE.instantiate()
+		transport_cards_container.add_child(row)
+		row.bind_data(entry)
+		row.image_pick_requested.connect(_on_transport_image_pick_requested)
+		row.image_clear_requested.connect(_on_transport_image_clear_requested)
+		row.image_preview_requested.connect(_on_transport_image_preview_requested)
+
+## Builds rows for each destination ticket config entry.
+func _build_destination_ticket_rows() -> void:
+	if config_data == null:
+		return
+
+	_clear_container(destination_tickets_container)
+
+	var city_ids: Array[String] = _get_city_ids_from_map_data()
+	var warning_map: Dictionary = _build_destination_ticket_warning_map()
+
+	for i in range(config_data.destination_tickets.size()):
+		var entry: DestinationTicketConfigData = config_data.destination_tickets[i]
+
+		var row_instance: Node = DESTINATION_TICKET_ROW_SCENE.instantiate()
+		var row: DestinationTicketRow = row_instance as DestinationTicketRow
+
+		if row == null:
+			push_error("DestinationTicketRow scene did not instantiate as DestinationTicketRow.")
+			continue
+
+		destination_tickets_container.add_child(row)
+		row.bind_data(entry, city_ids)
+		row.set_row_number(i + 1)
+
+		if warning_map.has(entry):
+			row.set_warning_state(true, warning_map[entry])
+		else:
+			row.set_warning_state(false)
+
+		row.remove_requested.connect(_on_destination_ticket_remove_requested.bind(entry))
+		row.image_pick_requested.connect(_on_destination_image_pick_requested)
+		row.image_clear_requested.connect(_on_destination_image_clear_requested)
+		row.data_changed.connect(_on_destination_ticket_data_changed)
+
+func _on_destination_ticket_data_changed() -> void:
+	_build_destination_ticket_rows()
+	_refresh_destination_ticket_counter()
+
+func _on_transport_image_preview_requested(data: TransportCardConfigData) -> void:
+	if data == null or data.image == null:
+		return
+
+	_show_image_preview(data.image, data.image.resource_path)
+
+func _on_destination_image_preview_requested(data: DestinationTicketConfigData) -> void:
+	if data == null or data.image == null:
+		return
+
+	_show_image_preview(data.image, data.image.resource_path)
+
+func _show_image_preview(texture: Texture2D, path: String) -> void:
+	preview_texture_rect.texture = texture
+	preview_path_label.text = path if not path.is_empty() else "No path"
+	image_preview_popup.popup_centered_ratio(0.6)
+
+func _on_destination_ticket_remove_requested(entry: DestinationTicketConfigData) -> void:
+	if config_data == null:
+		return
+
+	config_data.destination_tickets.erase(entry)
+	_build_destination_ticket_rows()
+	_refresh_destination_ticket_counter()
+
+func _refresh_destination_ticket_counter() -> void:
+	if config_data == null:
+		destination_count_label.text = "Destination Tickets: 0 total / 0 enabled"
+		return
+
+	var total: int = config_data.destination_tickets.size()
+	var enabled_count: int = 0
+
+	for entry in config_data.destination_tickets:
+		if entry.enabled:
+			enabled_count += 1
+
+	destination_count_label.text = "Destination Tickets: %d total / %d enabled" % [total, enabled_count]
+
+func _get_city_ids_from_map_data() -> Array[String]:
+	var result: Array[String] = []
+
+	if config_data == null or config_data.map_data == null:
+		return result
+
+	for city_data in config_data.map_data.cities:
+		result.append(city_data.city_id)
+
+	return result
+
+func _clear_container(container: Node) -> void:
+	for child in container.get_children():
+		child.queue_free()
+
+## Ensures the parent folder for the config resource path exists.
+func _ensure_config_directory_exists() -> bool:
+	var directory_path: String = save_config_resource_path.get_base_dir()
+
+	if DirAccess.dir_exists_absolute(directory_path):
+		return true
+
+	var error: Error = DirAccess.make_dir_recursive_absolute(directory_path)
+	if error != OK:
+		push_error("Failed to create config directory: %s (error code %d)" % [directory_path, error])
+		return false
+
+	return true
+
+#region ImageSelection
+func _on_transport_image_pick_requested(data: TransportCardConfigData) -> void:
+	if data == null:
+		return
+
+	_pending_transport_image_target = data
+	_pending_destination_image_target = null
+	image_file_dialog.popup_centered_ratio()
+
+func _on_transport_image_clear_requested(data: TransportCardConfigData) -> void:
+	if data == null:
+		return
+
+	data.image = null
+	_build_transport_card_rows()
+
+func _on_destination_image_pick_requested(data: DestinationTicketConfigData) -> void:
+	if data == null:
+		return
+
+	_pending_destination_image_target = data
+	_pending_transport_image_target = null
+	image_file_dialog.popup_centered_ratio()
+
+func _on_destination_image_clear_requested(data: DestinationTicketConfigData) -> void:
+	if data == null:
+		return
+
+	data.image = null
+	_build_destination_ticket_rows()
+	_refresh_destination_ticket_counter()
+
+func _on_image_file_selected(path: String) -> void:
+	var texture: Texture2D = load(path) as Texture2D
+	if texture == null:
+		push_error("Selected file is not a valid Texture2D: %s" % path)
+		_clear_pending_image_targets()
+		return
+
+	if _pending_transport_image_target != null:
+		_pending_transport_image_target.image = texture
+		_build_transport_card_rows()
+
+	elif _pending_destination_image_target != null:
+		_pending_destination_image_target.image = texture
+		_build_destination_ticket_rows()
+		_refresh_destination_ticket_counter()
+
+	_clear_pending_image_targets()
+
+func _clear_pending_image_targets() -> void:
+	_pending_transport_image_target = null
+	_pending_destination_image_target = null
+#endregion
+
+func _refresh_config_resource_label() -> void:
+	if not is_node_ready():
+		return
+
+	if config_data == null:
+		config_resource_path_label.text = "No config loaded"
+		return
+
+	if not save_config_resource_path.is_empty():
+		config_resource_path_label.text = save_config_resource_path
+	elif not config_data.resource_path.is_empty():
+		config_resource_path_label.text = config_data.resource_path
+	else:
+		config_resource_path_label.text = "Unsaved config resource"
+
+func _refresh_save_path_label() -> void:
+	if not is_node_ready():
+		return
+
+	save_path_value_label.text = save_config_resource_path if not save_config_resource_path.is_empty() else "No save path selected"
+
+func _on_load_config_pressed() -> void:
+	load_config_file_dialog.popup_centered_ratio()
+
+func _on_new_config_pressed() -> void:
+	var new_config := TicketGameConfigData.new()
+
+	if config_data != null and config_data.map_data != null:
+		new_config.map_data = config_data.map_data
+	elif config_data == null:
+		new_config.map_data = null
+
+	config_data = new_config
+	_refresh_ui_from_config()
+	_refresh_config_resource_label()
+
+func _on_choose_save_path_pressed() -> void:
+	save_config_file_dialog.current_file = save_config_resource_path.get_file()
+	save_config_file_dialog.current_dir = save_config_resource_path.get_base_dir()
+	save_config_file_dialog.popup_centered_ratio()
+
+func _on_load_config_file_selected(path: String) -> void:
+	var loaded_resource: Resource = load(path)
+	var loaded_config: TicketGameConfigData = loaded_resource as TicketGameConfigData
+
+	if loaded_config == null:
+		push_error("Selected file is not a TicketGameConfigData resource: %s" % path)
+		return
+
+	config_data = loaded_config
+	save_config_resource_path = path
+	_refresh_ui_from_config()
+	_refresh_config_resource_label()
+	_refresh_save_path_label()
+
+func _on_save_config_file_selected(path: String) -> void:
+	if not path.ends_with(".tres"):
+		path += ".tres"
+
+	save_config_resource_path = path
+	_refresh_save_path_label()
+
+
+func _get_destination_ticket_pair_key(from_city_id: String, to_city_id: String) -> String:
+	var a: String = from_city_id
+	var b: String = to_city_id
+
+	if a > b:
+		var temp: String = a
+		a = b
+		b = temp
+
+	return "%s|%s" % [a, b]
+
+func _build_destination_ticket_warning_map() -> Dictionary:
+	var warning_map: Dictionary = {}
+	var pair_counts: Dictionary = {}
+
+	if config_data == null:
+		return warning_map
+
+	for entry in config_data.destination_tickets:
+		if entry == null or not entry.enabled:
+			continue
+
+		if entry.from_city_id == entry.to_city_id and not entry.from_city_id.is_empty():
+			warning_map[entry] = "Destination ticket cannot point to the same city."
+
+		var pair_key: String = _get_destination_ticket_pair_key(entry.from_city_id, entry.to_city_id)
+		if not pair_counts.has(pair_key):
+			pair_counts[pair_key] = 0
+		pair_counts[pair_key] += 1
+
+	for entry in config_data.destination_tickets:
+		if entry == null or not entry.enabled:
+			continue
+
+		var pair_key: String = _get_destination_ticket_pair_key(entry.from_city_id, entry.to_city_id)
+		if pair_counts.get(pair_key, 0) > 1:
+			if warning_map.has(entry):
+				warning_map[entry] += " Duplicate city combination with another row."
+			else:
+				warning_map[entry] = "Duplicate city combination with another row."
+
+	return warning_map

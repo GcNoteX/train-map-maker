@@ -70,3 +70,30 @@ static func color_to_dict(color: Color) -> Dictionary:
 		"a": color.a,
 		"hex": color.to_html()
 	}
+
+static func all_cart_type_strings() -> Array[String]:
+	return [
+		"NONE",
+		"PURPLE",
+		"BLUE",
+		"ORANGE",
+		"WHITE",
+		"GREEN",
+		"YELLOW",
+		"BLACK",
+		"RED",
+		"GRAY"
+	]
+
+static func playable_cart_type_strings() -> Array[String]:
+	return [
+		"PURPLE",
+		"BLUE",
+		"ORANGE",
+		"WHITE",
+		"GREEN",
+		"YELLOW",
+		"BLACK",
+		"RED",
+		"GRAY"
+	]

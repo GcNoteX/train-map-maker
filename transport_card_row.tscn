@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://cxg0fistnkjqe"]
+
+[ext_resource type="Script" uid="uid://csgdnrwu35utt" path="res://transport_card_row.gd" id="1_mdvob"]
+
+[node name="TransportCardRow" type="HBoxContainer" unique_id=1766484148]
+offset_right = 96.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_mdvob")
+
+[node name="CartTypeLabel" type="Label" parent="." unique_id=833008761]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Cart Type"
+
+[node name="CardCountSpinBox" type="SpinBox" parent="." unique_id=635301144]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+
+[node name="ImagePreviewButton" type="Button" parent="." unique_id=2057624810]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+text = "Preview Image"
+expand_icon = true
+
+[node name="ImagePathLabel" type="Label" parent="." unique_id=1196000791]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
+
+[node name="SelectImageButton" type="Button" parent="." unique_id=1202844771]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Select Image"
+
+[node name="ClearImageButton" type="Button" parent="." unique_id=951209681]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Clear Image"

@@ -1,0 +1,78 @@
+[gd_resource type="Resource" script_class="TicketGameConfigData" format=3 uid="uid://3ol1c06u8ovk"]
+
+[ext_resource type="Script" uid="uid://kyyhia4sfg41" path="res://data/destination_ticket_config_data.gd" id="1_8hnoj"]
+[ext_resource type="Resource" uid="uid://2gm7tchym5mp" path="res://maps/map_data.tres" id="2_6xd47"]
+[ext_resource type="Script" uid="uid://6wfvn15c0uyb" path="res://data/ticket_game_config_data.gd" id="2_38ldh"]
+[ext_resource type="Texture2D" uid="uid://b2oqe8oq2trtd" path="res://example_graph.jpg" id="2_h7p20"]
+[ext_resource type="Script" uid="uid://bhr3fap04n2qe" path="res://data/transport_card_config_data.gd" id="3_6xd47"]
+[ext_resource type="Texture2D" uid="uid://cannk5fyhdkck" path="res://london_map.jpg" id="6_pan2t"]
+
+[sub_resource type="Resource" id="Resource_ni10h"]
+script = ExtResource("1_8hnoj")
+points = 1
+from_city_id = "city_1"
+to_city_id = "city_3"
+image = ExtResource("2_h7p20")
+
+[sub_resource type="Resource" id="Resource_h7p20"]
+script = ExtResource("1_8hnoj")
+enabled = false
+from_city_id = "city_3"
+to_city_id = "city_1"
+
+[sub_resource type="Resource" id="Resource_pan2t"]
+script = ExtResource("1_8hnoj")
+enabled = false
+from_city_id = "city_1"
+to_city_id = "city_3"
+
+[sub_resource type="Resource" id="Resource_sxa38"]
+script = ExtResource("1_8hnoj")
+from_city_id = "city_2"
+to_city_id = "city_1"
+
+[sub_resource type="Resource" id="Resource_2i16v"]
+script = ExtResource("3_6xd47")
+cart_type = "PURPLE"
+card_count = 4
+image = ExtResource("6_pan2t")
+
+[sub_resource type="Resource" id="Resource_pw5hr"]
+script = ExtResource("3_6xd47")
+cart_type = "BLUE"
+card_count = 3
+
+[sub_resource type="Resource" id="Resource_2o1gd"]
+script = ExtResource("3_6xd47")
+cart_type = "ORANGE"
+
+[sub_resource type="Resource" id="Resource_m5ml5"]
+script = ExtResource("3_6xd47")
+cart_type = "WHITE"
+
+[sub_resource type="Resource" id="Resource_t8x0l"]
+script = ExtResource("3_6xd47")
+cart_type = "GREEN"
+
+[sub_resource type="Resource" id="Resource_jiwmq"]
+script = ExtResource("3_6xd47")
+cart_type = "YELLOW"
+
+[sub_resource type="Resource" id="Resource_fqlsp"]
+script = ExtResource("3_6xd47")
+cart_type = "BLACK"
+
+[sub_resource type="Resource" id="Resource_2rw4n"]
+script = ExtResource("3_6xd47")
+cart_type = "RED"
+
+[sub_resource type="Resource" id="Resource_bey8b"]
+script = ExtResource("3_6xd47")
+cart_type = "GRAY"
+
+[resource]
+script = ExtResource("2_38ldh")
+map_data = ExtResource("2_6xd47")
+transport_cards = Array[ExtResource("3_6xd47")]([SubResource("Resource_2i16v"), SubResource("Resource_pw5hr"), SubResource("Resource_2o1gd"), SubResource("Resource_m5ml5"), SubResource("Resource_t8x0l"), SubResource("Resource_jiwmq"), SubResource("Resource_fqlsp"), SubResource("Resource_2rw4n"), SubResource("Resource_bey8b")])
+destination_tickets = Array[ExtResource("1_8hnoj")]([SubResource("Resource_ni10h"), SubResource("Resource_h7p20"), SubResource("Resource_pan2t"), SubResource("Resource_sxa38")])
+metadata/_custom_type_script = "uid://6wfvn15c0uyb"
